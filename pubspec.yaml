@@ -13,7 +13,7 @@ dependencies:
   shared_preferences: ^2.2.2
   flutter_local_notifications: ^17.2.2
   timezone: ^0.9.4
-  flutter_timezone: ^1.0.8
+  flutter_timezone: ^3.0.0
   image_picker: ^1.1.2
   path_provider: ^2.1.4
   permission_handler: ^11.3.1
