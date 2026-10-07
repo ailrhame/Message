@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:image_picker/image_picker.dart';
@@ -171,6 +172,8 @@ class NotifService {
         when,
         details,
         androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+        uiLocalNotificationDateInterpretation:
+            UILocalNotificationDateInterpretation.absoluteTime,
       );
     } on PlatformException {
       await _plugin.zonedSchedule(
@@ -180,6 +183,8 @@ class NotifService {
         when,
         details,
         androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
+        uiLocalNotificationDateInterpretation:
+            UILocalNotificationDateInterpretation.absoluteTime,
       );
     }
   }
@@ -208,8 +213,8 @@ class NotifStore {
     try {
       final List<dynamic> arr = jsonDecode(raw) as List<dynamic>;
       return arr
-          .map((dynamic e) =>
-              FakeNotif.fromJson(Map<String, dynamic>.from(e as Map<dynamic, dynamic>)))
+          .map((dynamic e) => FakeNotif.fromJson(
+              Map<String, dynamic>.from(e as Map<dynamic, dynamic>)))
           .toList();
     } catch (_) {
       return <FakeNotif>[];
@@ -453,7 +458,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 _delete(n);
                               }
                             },
-                            itemBuilder: (_) => const <PopupMenuEntry<String>>[
+                            itemBuilder: (_) =>
+                                const <PopupMenuEntry<String>>[
                               PopupMenuItem<String>(
                                 value: 'now',
                                 child: Text('إطلاق فوري'),
@@ -569,18 +575,15 @@ class _EditorScreenState extends State<EditorScreen> {
     );
     if (t == null) return;
     setState(() {
-      _scheduledAt =
-          DateTime(d.year, d.month, d.day, t.hour, t.minute);
+      _scheduledAt = DateTime(d.year, d.month, d.day, t.hour, t.minute);
     });
   }
 
   void _save() {
-    final String app = _appCtrl.text.trim().isEmpty
-        ? 'App'
-        : _appCtrl.text.trim();
-    final String title = _titleCtrl.text.trim().isEmpty
-        ? '(بدون عنوان)'
-        : _titleCtrl.text.trim();
+    final String app =
+        _appCtrl.text.trim().isEmpty ? 'App' : _appCtrl.text.trim();
+    final String title =
+        _titleCtrl.text.trim().isEmpty ? '(بدون عنوان)' : _titleCtrl.text.trim();
     final String body =
         _bodyCtrl.text.trim().isEmpty ? ' ' : _bodyCtrl.text.trim();
 
@@ -602,9 +605,7 @@ class _EditorScreenState extends State<EditorScreen> {
       textDirection: TextDirection.rtl,
       child: Scaffold(
         appBar: AppBar(
-          title: Text(widget.existing == null
-              ? 'إشعار جديد'
-              : 'تعديل الإشعار'),
+          title: Text(widget.existing == null ? 'إشعار جديد' : 'تعديل الإشعار'),
           backgroundColor: const Color(0xFF1F1B24),
           actions: <Widget>[
             IconButton(
@@ -703,8 +704,8 @@ class _EditorScreenState extends State<EditorScreen> {
                 onTap: _pickDateTime,
                 child: Container(
                   width: double.infinity,
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 14, vertical: 16),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 14, vertical: 16),
                   decoration: BoxDecoration(
                     color: const Color(0xFF1E1E1E),
                     borderRadius: BorderRadius.circular(10),
@@ -712,8 +713,7 @@ class _EditorScreenState extends State<EditorScreen> {
                   ),
                   child: Row(
                     children: <Widget>[
-                      const Icon(Icons.schedule,
-                          color: Color(0xFFB39DDB)),
+                      const Icon(Icons.schedule, color: Color(0xFFB39DDB)),
                       const SizedBox(width: 10),
                       Text(
                         _fmtFull(_scheduledAt),
